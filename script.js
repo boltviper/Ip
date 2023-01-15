@@ -1,33 +1,55 @@
-function getIPLocation() {
-    var ip = document.querySelector("#ip-input").value;
-    var xhr = new XMLHttpRequest();
-    var url = "https://ipapi.co/" + ip + "/json/";
-    xhr.open("GET", url, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            var locationInfo = document.querySelector("#location-info");
-            locationInfo.innerHTML = "IP: " + response.ip + "<br>" +
-                                    "City: " + response.city + "<br>" +
-                                    "Region: " + response.region + " " + response.region_code + "<br>" +
-                                    "Country: " + response.country_name + " " + response.country_code + "<br>" +
-                                
-                                    "Country Capital: " + response.country_capital + "<br>" +
-                                    
-                                    "Continent Code: " + response.continent_code + "<br>" +
-                                    "In EU: " + response.in_eu + "<br>" +
-                                    "Postal Code: " + response.postal + "<br>" +
-                                    "Latitude: " + response.latitude + "<br>" +
-                                    "Longitude: " + response.longitude + "<br>" +
-                                    "Timezone: " + response.timezone + " UTC Offset: " + response.utc_offset + "<br>" +
-                                    "Country Calling Code: " + response.country_calling_code + "<br>" +
-                                    "Currency: " + response.currency + " " + response.currency_name + "<br>" +
-                                    "Languages: " + response.languages + "<br>" +
-                                    "ASN: " + response.asn + "<br>" +
-                                    "Organization: " + response.org;
-            locationInfo.style.display = "block";
-        }
-    };
-    xhr.send();
+
+function updateLengthLabel() {
+  let lengthRange = document.getElementById("lengthRange");
+  let lengthLabel = document.getElementById("lengthLabel");
+  
+  // indstil værdien af ​​lengthRange-elementet til 10, hvis den er mindre end 10
+  if (lengthRange.value < 10) {
+    lengthRange.value = 10;
+  }
+  lengthLabel.textContent = lengthRange.value;
 }
 
+  // funktion til at generere en adgangskode baseret på de angivne parametre
+  function generatePassword(length, includeLowercase, includeUppercase, includeNumbers, includeSpecial) {
+    // opsætte tegnsættene for adgangskoden
+    let charSet = "";
+    if (includeLowercase) {
+      charSet += "abcdefghijklmnopqrstuvwxyz";
+    }
+    if (includeUppercase) {
+      charSet += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    }
+    if (includeNumbers) {
+      charSet += "0123456789";
+    }
+    if (includeSpecial) {
+      charSet += "!@#$%^&*()_+-=[]{}|;':\"<>,./?";
+    }
+
+    // generere adgangskoden ved at vælge tilfældige tegn fra tegnsættet
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      password += charSet.charAt(Math.floor(Math.random() * charSet.length));
+    }
+
+    return password;
+  }
+
+  // Forbind formularelementernes værdier med funktionens parametre og generer adgangskoden
+  function generateAndShowPassword() {
+    let length = document.getElementById("lengthRange").value;
+    let includeLowercase = document.getElementById("includeLowercase").checked;
+    let includeUppercase = document.getElementById("includeUppercase").checked;
+    let includeNumbers = document.getElementById("includeNumbers").checked;
+    let includeSpecial = document.getElementById("includeSpecial").checked;
+
+    // generere adgangskoden
+    let password = generatePassword(length, includeLowercase, includeUppercase, includeNumbers, includeSpecial);
+
+    // Få elementet for adgangskodeboksen
+    let passwordBox = document.getElementById("passwordBox");
+
+    // opdatere indholdet af elementet med den genererede adgangskode
+    passwordBox.textContent = password;
+  }
